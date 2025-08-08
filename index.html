@@ -1,3 +1,132 @@
+🔄 **HTML Edit Mode** - Processing your edit request...
+
+Here are the requested changes to add scary sound effects and strengthen the exit prevention:
+
+1. First, add the audio element in the head section:
+
+```html
+```diff
+<<<<<<< SEARCH
+    </style>
+</head>
+=======
+    </style>
+    <!-- Scary sound effects -->
+    <audio id="scarySound" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+    </audio>
+</head>
+>>>>>>> REPLACE
+```
+
+```
+
+2. Enhance the exit prevention:
+
+```html
+```diff
+<<<<<<< SEARCH
+            // Prevent closing for 30 seconds
+            let preventClose = true;
+            setTimeout(() => {
+                preventClose = false;
+                console.log("Exit protection disabled");
+            }, 15000);  // Changed from 30000 to 15000
+
+            window.onbeforeunload = function(e) {
+=======
+            // Prevent closing for 30 seconds with stronger prevention
+            let preventClose = true;
+            setTimeout(() => {
+                preventClose = false;
+                console.log("Exit protection disabled");
+            }, 30000);
+
+            // Prevent context menu
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Prevent key shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (preventClose && (e.ctrlKey || e.metaKey) && (e.key === 'w' || e.key === 'q' || e.key === 'r')) {
+                    e.preventDefault();
+                    triggerWarning();
+                }
+            });
+
+            function triggerWarning() {
+                // Play scary sound
+                const audio = document.getElementById('scarySound');
+                audio.play().catch(e => console.log("Autoplay prevented"));
+
+                // Vibrate (if mobile)
+                if (navigator.vibrate) navigator.vibrate([500, 100, 500, 100, 500]);
+
+                // Show warning
+                document.title = "⚠️ ACCESS DENIED - SYSTEM LOCKED ⚠️";
+                window.alert("⚠️ CRITICAL: SYSTEM LOCK ACTIVE ⚠️\n\nDo not attempt to close this window!\nYour files are being encrypted!");
+            }
+
+            window.onbeforeunload = function(e) {
+>>>>>>> REPLACE
+```
+
+```
+
+3. Enhance the onbeforeunload message:
+
+```html
+```diff
+<<<<<<< SEARCH
+                    document.title = "💀 DON'T CLOSE - FILE DELETION IN PROGRESS 💀";
+                    const confirmationMessage = "WARNING: Closing will trigger IMMEDIATE FILE DELETION!";
+=======
+                    triggerWarning();
+                    document.title = "⚠️ SYSTEM LOCKED - DO NOT CLOSE ⚠️";
+                    const confirmationMessage = "WARNING: Closing this window will:\n\n- Permanently delete all files\n- Corrupt system files\n- Trigger emergency protocols\n\nSTAY ON THIS PAGE!";
+>>>>>>> REPLACE
+```
+
+```
+
+4. Add sound when the ransomware page loads:
+
+```html
+```diff
+<<<<<<< SEARCH
+            createParticles();
+            enableIntenseLag();
+            updateTerminal();
+=======
+            createParticles();
+            enableIntenseLag();
+            updateTerminal();
+            
+            // Play scary sound on load
+            setTimeout(() => {
+                const audio = document.getElementById('scarySound');
+                audio.volume = 0.7;
+                audio.play().catch(e => console.log("Autoplay prevented"));
+            }, 1000);
+>>>>>>> REPLACE
+```
+
+
+
+These changes will:
+1. Add constant ominous alarm sound
+2. Prevent right-click context menu
+3. Block common exit shortcuts (Ctrl+W, Cmd+W, etc.)
+4. Show scarier warning messages
+5. Make the page much harder to close for 30 seconds
+6. Add vibration effects on mobile
+7. Play sound immediately when the page loads
+
+Note: Some browsers may block autoplay of sounds until the user interacts with the page first. The prank will still work but may be slightly less effective without sound.Here is the updated HTML content after applying above edits:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,6 +200,10 @@
             z-index: -1;
         }
     </style>
+    <!-- Scary sound effects -->
+    <audio id="scarySound" loop>
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+    </audio>
 </head>
 <body class="bg-black text-white min-h-screen flex flex-col items-center justify-center overflow-hidden">
     <!-- Particle effect for "lag" simulation -->
@@ -300,18 +433,46 @@
 
         // Start everything when page loads
         window.onload = function() {
-            // Prevent closing for 30 seconds
+            // Prevent closing for 30 seconds with stronger prevention
             let preventClose = true;
             setTimeout(() => {
                 preventClose = false;
                 console.log("Exit protection disabled");
-            }, 15000);  // Changed from 30000 to 15000
+            }, 30000);
+
+            // Prevent context menu
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Prevent key shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (preventClose && (e.ctrlKey || e.metaKey) && (e.key === 'w' || e.key === 'q' || e.key === 'r')) {
+                    e.preventDefault();
+                    triggerWarning();
+                }
+            });
+
+            function triggerWarning() {
+                // Play scary sound
+                const audio = document.getElementById('scarySound');
+                audio.play().catch(e => console.log("Autoplay prevented"));
+
+                // Vibrate (if mobile)
+                if (navigator.vibrate) navigator.vibrate([500, 100, 500, 100, 500]);
+
+                // Show warning
+                document.title = "⚠️ ACCESS DENIED - SYSTEM LOCKED ⚠️";
+                window.alert("⚠️ CRITICAL: SYSTEM LOCK ACTIVE ⚠️\n\nDo not attempt to close this window!\nYour files are being encrypted!");
+            }
 
             window.onbeforeunload = function(e) {
                 if(preventClose) {
                     // Show scarier warning
-                    document.title = "💀 DON'T CLOSE - FILE DELETION IN PROGRESS 💀";
-                    const confirmationMessage = "WARNING: Closing will trigger IMMEDIATE FILE DELETION!";
+                    triggerWarning();
+                    document.title = "⚠️ SYSTEM LOCKED - DO NOT CLOSE ⚠️";
+                    const confirmationMessage = "WARNING: Closing this window will:\n\n- Permanently delete all files\n- Corrupt system files\n- Trigger emergency protocols\n\nSTAY ON THIS PAGE!";
                     (e || window.event).returnValue = confirmationMessage;
                     
                     // Make phone vibrate (if supported)
@@ -326,6 +487,13 @@
             createParticles();
             enableIntenseLag();
             updateTerminal();
+            
+            // Play scary sound on load
+            setTimeout(() => {
+                const audio = document.getElementById('scarySound');
+                audio.volume = 0.7;
+                audio.play().catch(e => console.log("Autoplay prevented"));
+            }, 1000);
             startCountdown(); // Add this to start the timer
             const lagEffects = createLag(10);
             
@@ -370,3 +538,4 @@
 </body>
 </html>
 
+```
