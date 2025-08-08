@@ -47,9 +47,18 @@
             animation: load 10s linear infinite;
         }
         
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+        
         @keyframes load {
             0% { width: 0%; }
             100% { width: 100%; }
+        }
+        
+        #countdown {
+            color: #ff0000;
+            animation: blink 1s infinite;
         }
         
         .particles {
@@ -71,21 +80,22 @@
         <!-- Warning Header -->
         <div class="text-center mb-8">
             <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/36a8ae35-2fc8-4d2a-b65b-1944df520d70.png" alt="Large red exclamation mark warning symbol with glowing effect" class="mx-auto mb-4 h-16 w-16">
-            <h1 class="glitch-text text-5xl font-bold text-red-600 mb-4">WARNING!</h1>
-            <p class="text-red-400 mb-2">Your device has been compromised!</p>
+            <h1 class="glitch-text text-5xl font-bold text-red-600 mb-4">🚨 FINAL WARNING 🚨</h1>
+            <p class="text-red-400 mb-2">⚠️ Your device has been TAKEN OVER! Files encrypted!</p
         </div>
         
         <!-- Ransom Message -->
         <div class="bg-red-900 bg-opacity-30 p-6 rounded-lg border border-red-600 mb-8">
-            <p class="mb-4">We've encrypted all your data with military-grade encryption.</p>
-            <p class="mb-4">You have <span class="font-bold">24 HOURS</span> to pay <span class="font-bold">0.5 BTC</span> to recover your files.</p>
-            <p>Failure to comply will result in permanent data loss.</p>
+            <p class="mb-4">⚠️ ALL YOUR PERSONAL DATA HAS BEEN ENCRYPTED!</p>
+            <p class="mb-4">📛 <span class="font-bold italic">Critical:</span> You have <span class="font-bold blink">ONLY 24 HOURS</span> to send <span class="font-bold">0.5 BTC</span></p>
+            <p>💀 Permanent file deletion begins in <span id="countdown" class="font-bold">23:59:59</span></p
         </div>
         
         <!-- Fake Terminal -->
         <div class="terminal p-4 mb-8 rounded-lg" id="terminal">
-            <div>> Starting ransomware.exe...</div>
-            <div>> Scanning device...</div>
+            <div class="text-red-500">🔥 WARNING: RANSOMWARE ACTIVATED</div>
+            <div class="text-red-500">💀 Scanning device for personal files...</div>
+            <div class="text-red-500">📛 Found PRIVATE photos, messages and documents</div
             <div class="text-green-500">> Found 1542 files to encrypt</div>
             <div>> Encrypting Documents/important.docx... <span class="text-green-500">DONE</span></div>
             <div>> Encrypting Photos/vacation.jpg... <span class="text-green-500">DONE</span></div>
@@ -104,8 +114,8 @@
         <div class="bg-zinc-900 p-6 rounded-lg border border-zinc-700 mb-8">
             <h2 class="text-xl font-bold mb-4">To recover your data:</h2>
             <ol class="list-decimal pl-5 mb-4">
-                <li class="mb-2">Send 0.5 BTC to: <span class="font-mono bg-zinc-800 p-1">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span></li>
-                <li class="mb-2">Email transaction ID to: <span class="font-mono bg-zinc-800 p-1">recovery@notascam.com</span></li>
+                <li class="mb-2">Send 0.5 BTC to: <span class="font-mono bg-zinc-800 p-1">Dann</span></li>
+                <li class="mb-2">Email transaction ID to: <span class="font-mono bg-zinc-800 p-1">dann95424@gmail.com</span></li>
                 <li>You will receive decryption key within 24 hours</li>
             </ol>
         </div>
@@ -123,6 +133,27 @@
     </div>
     
     <script>
+        // Scary countdown timer
+        function startCountdown() {
+            let hours = 23;
+            let minutes = 59;
+            let seconds = 59;
+            
+            setInterval(() => {
+                seconds--;
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                }
+                if (minutes < 0) {
+                    minutes = 59;
+                    hours--;
+                }
+                document.getElementById('countdown').textContent = 
+                    `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            }, 1000);
+        }
+
         // Create particles for "lag" effect
         function createParticles() {
             const particles = document.getElementById('particles');
@@ -180,7 +211,7 @@
                 "> Preparing ransom note...",
                 "> Uploading system info to command server...",
                 "> Wiping temporary files...",
-                "> Exit protection active for 30 seconds...",
+                "> Exit protection active for 15 seconds...",
                 "> Security override available after timer expires"
             ];
             
@@ -193,7 +224,7 @@
                 } else {
                     clearInterval(interval);
                 }
-            }, 1500);
+            }, intenseLag ? 500 : 1500); // Faster updates during intense lag
         }
         
         // Create fake lag by overloading with animations
@@ -255,6 +286,18 @@
             `;
         });
         
+        // Intense lag setup
+        let intenseLag = false;
+        
+        function enableIntenseLag() {
+            intenseLag = true;
+            const lagElements = createLag(20); // More elements
+            setTimeout(() => {
+                intenseLag = false;
+                lagElements.forEach(el => el.remove());
+            }, 15000); // Match the 15s window
+        }
+
         // Start everything when page loads
         window.onload = function() {
             // Prevent closing for 30 seconds
@@ -262,20 +305,28 @@
             setTimeout(() => {
                 preventClose = false;
                 console.log("Exit protection disabled");
-            }, 30000);
+            }, 15000);  // Changed from 30000 to 15000
 
             window.onbeforeunload = function(e) {
                 if(preventClose) {
-                    // Show fake warning
-                    document.title = "⚠️ DON'T CLOSE! ⚠️";
-                    const confirmationMessage = "Closing will permanently corrupt your files!";
+                    // Show scarier warning
+                    document.title = "💀 DON'T CLOSE - FILE DELETION IN PROGRESS 💀";
+                    const confirmationMessage = "WARNING: Closing will trigger IMMEDIATE FILE DELETION!";
                     (e || window.event).returnValue = confirmationMessage;
+                    
+                    // Make phone vibrate (if supported)
+                    if (navigator.vibrate) {
+                        navigator.vibrate([500,200,500]);
+                    }
+                    
                     return confirmationMessage;
                 }
             };
 
             createParticles();
+            enableIntenseLag();
             updateTerminal();
+            startCountdown(); // Add this to start the timer
             const lagEffects = createLag(10);
             
             // Make the cursor blink
@@ -296,8 +347,9 @@
             });
             
             function updateMouse() {
-                const diffX = (mouseX - delayedX) * 0.1;
-                const diffY = (mouseY - delayedY) * 0.1;
+                const lagFactor = intenseLag ? 0.3 : 0.1;
+                const diffX = (mouseX - delayedX) * lagFactor;
+                const diffY = (mouseY - delayedY) * lagFactor;
                 
                 if (Math.abs(diffX) > 0.5 || Math.abs(diffY) > 0.5) {
                     delayedX += diffX;
