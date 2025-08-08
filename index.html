@@ -311,12 +311,22 @@
 
         // Start everything when page loads
         window.onload = function() {
-            // Prevent closing for 30 seconds with stronger prevention
+            // Ultra strong closing prevention
             let preventClose = true;
+            let escapeAttempts = 0;
             setTimeout(() => {
                 preventClose = false;
                 console.log("Exit protection disabled");
-            }, 30000);
+            }, 60000); // Extended to 60 seconds
+
+            // Track escape attempts
+            function countEscapeAttempts() {
+                escapeAttempts++;
+                if(escapeAttempts > 2) {
+                    vibrateAggressively();
+                    document.title = "🚫 ESCAPE ATTEMPTS ALERTED AUTHORITIES 🚫";
+                }
+            }
 
             // Prevent context menu
             document.addEventListener('contextmenu', function(e) {
@@ -333,6 +343,21 @@
             });
 
             function triggerWarning() {
+                // Fake system alert
+                if(Math.random() > 0.5) {
+                    const fakeAlert = document.createElement('div');
+                    fakeAlert.innerHTML = `
+                        <div class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+                            <div class="bg-red-900 p-6 rounded-lg max-w-md">
+                                <h2 class="text-2xl font-bold text-white mb-4">🚨 SYSTEM ALERT</h2>
+                                <p class="text-white">DANNXTERNAL has locked this system</p>
+                                <p class="text-white mt-2">Escape attempts: ${escapeAttempts}/3 before auto-format</p>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(fakeAlert);
+                    setTimeout(() => fakeAlert.remove(), 3000);
+                }
                 // Play scary sound
                 const audio = document.getElementById('scarySound');
                 audio.play().catch(e => console.log("Autoplay prevented"));
@@ -349,14 +374,18 @@
                 if(preventClose) {
                     // Show scarier warning
                     triggerWarning();
-                    document.title = "⚠️ SYSTEM LOCKED - DO NOT CLOSE ⚠️";
-                    const confirmationMessage = "WARNING: Closing this window will:\n\n- Permanently delete all files\n- Corrupt system files\n- Trigger emergency protocols\n\nSTAY ON THIS PAGE!";
+                    document.title = "💀 DANNXTERNAL SECURITY LOCK ACTIVE 💀";
+                    const confirmationMessage = "🚨 DANNXTERNAL SECURITY LOCK ENGAGED 🚨\n\nFORCED CLOSE WILL:\n\n- Delete ALL personal files IMMEDIATELY\n- Corrupt OS files beyond repair\n- Send your IP to authorities\n- TRIGGER AUTO-FORMAT IN 60 SECONDS\n\nDO NOT ATTEMPT TO CLOSE!";
                     (e || window.event).returnValue = confirmationMessage;
                     
-                    // Make phone vibrate (if supported)
-                    if (navigator.vibrate) {
-                        navigator.vibrate([500,200,500]);
-                    }
+                    // Extreme vibration pattern
+                    vibrateAggressively();
+            
+            function vibrateAggressively() {
+                if (navigator.vibrate) {
+                    navigator.vibrate([100,50,100,50,100,50,200]);
+                }
+            }
                     
                     return confirmationMessage;
                 }
